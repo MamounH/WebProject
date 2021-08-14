@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PasswordHash implements IPasswordHash{
+public class SHA512Hash implements IPasswordHash{
 
     private final Logger logger = Logger.getLogger("PasswordHashClass");
 

@@ -1,9 +1,8 @@
 package webapp.login;
 
-import webapp.data.Role;
 import webapp.data.domain.User;
 import webapp.data.dao.UsersDao;
-import webapp.security_config.PasswordHash;
+import webapp.security_config.SHA512Hash;
 
 import java.io.IOException;
 
@@ -27,7 +26,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		usersDao = new UsersDao(dataSource, new PasswordHash());
+		usersDao = new UsersDao(dataSource, new SHA512Hash());
 	}
 
 	@Override
@@ -42,34 +41,21 @@ public class LoginServlet extends HttpServlet {
 
 
 		User user = usersDao.VerifyUser(email,password);
-		System.out.println(" from servlet user role is "+ user.getRole());
 
-		if (user.getRole().equals(Role.NOT_USER)){
-			req.setAttribute("errorM","Invalid User");
-			req.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(req,res);
-			req.getSession().setAttribute("role",user.getRole());
-		}
-		else if (user.getRole().equals(Role.STUDENT)){
-			req.getSession().setAttribute("id",user.getId());
-			req.getSession().setAttribute("role",user.getRole());
-			req.getSession().setAttribute("name",email);
-			res.sendRedirect("/StudentCourses.do");
-		}
-		else if (user.getRole().equals(Role.INSTRUCTOR)){
 		req.getSession().setAttribute("id",user.getId());
-		req.getSession().setAttribute("name",email);
-			req.getSession().setAttribute("role",user.getRole());
-			res.sendRedirect("/Instructor/Courses.do");
+		req.getSession().setAttribute("role",user.getRole());
 
-		} else if (user.getRole().equals(Role.ADMIN)){
-			req.getSession().setAttribute("id",user.getId());
-			req.getSession().setAttribute("name",email);
-			req.getSession().setAttribute("role",user.getRole());
-			res.sendRedirect("/Admin/Users.do");
+
+		switch (user.getRole()){
+			case ADMIN-> res.sendRedirect("/Admin/Users.do");
+			case INSTRUCTOR-> res.sendRedirect("/Instructor/Courses.do");
+			case STUDENT->res.sendRedirect("/StudentCourses.do");
+			default-> {
+				req.setAttribute("errorM","Invalid User");
+				req.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(req,res);
+			}
+
 		}
-
-
-
 
 	}
 

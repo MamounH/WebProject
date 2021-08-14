@@ -9,6 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UsersDao {
 
@@ -18,6 +20,9 @@ public class UsersDao {
 
     private DataSource dataSource;
     private IPasswordHash passwordHash;
+
+    private final Logger logger = Logger.getLogger("UsersDao Log");
+
 
     public UsersDao(DataSource dataSource){
         this.dataSource=dataSource;
@@ -34,38 +39,38 @@ public class UsersDao {
     public List<User> getAll(){
 
         List<User> users=new ArrayList<>();
-
         try {
-
-            connection=dataSource.getConnection();
-
-            String sql = "SELECT * FROM `users`";
-
-            statement = connection.prepareStatement(sql);
-
-            resultSet=statement.executeQuery();
-
-            while(resultSet.next()){
-
-                int id = resultSet.getInt("id");
-                String email = resultSet.getString("email");
-                String fName = resultSet.getString("first_name");
-                String lName = resultSet.getString("last_name");
-                String role = resultSet.getString("role");
-
-                User user = new User.UserBuilder().id(id).fName(fName)
-                        .lName(lName).email(email).role(Role.valueOf(role)).build();
-
-                users.add(user);
-            }
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            getAllUsers(users);
+        } catch (SQLException ex) {
+            logError(ex);
         } finally {
             close(connection,statement,resultSet);
         }
-
-
         return users;
+    }
+
+    private void getAllUsers(List<User> users) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql = "SELECT * FROM `users`";
+
+        statement = connection.prepareStatement(sql);
+
+        resultSet=statement.executeQuery();
+
+        while(resultSet.next()){
+
+            int id = resultSet.getInt("id");
+            String email = resultSet.getString("email");
+            String fName = resultSet.getString("first_name");
+            String lName = resultSet.getString("last_name");
+            String role = resultSet.getString("role");
+
+            User user = new User.UserBuilder().id(id).fName(fName)
+                    .lName(lName).email(email).role(Role.valueOf(role)).build();
+
+            users.add(user);
+        }
     }
 
     public List<User> getUsersByRole(Role role){
@@ -73,38 +78,41 @@ public class UsersDao {
         List<User> users=new ArrayList<>();
 
         try {
-
-            connection=dataSource.getConnection();
-
-            String sql = "SELECT * FROM `users` WHERE role=?";
-
-
-            statement = connection.prepareStatement(sql);
-
-            statement.setString(1,role.toString());
-
-            resultSet=statement.executeQuery();
-
-            while(resultSet.next()) {
-
-                int id = resultSet.getInt("id");
-                String fName = resultSet.getString("first_name");
-                String lName = resultSet.getString("last_name");
-                User user = new User.UserBuilder().id(id).fName(fName).lName(lName).build();
-                users.add(user);
-            }
-
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            findUsers(role, users);
+        } catch (SQLException ex) {
+            logError(ex);
         } finally {
             close(connection,statement,resultSet);
         }
         return users;
     }
 
+    private void findUsers(Role role, List<User> users) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql = "SELECT * FROM `users` WHERE role=?";
+
+
+        statement = connection.prepareStatement(sql);
+
+        statement.setString(1, role.toString());
+
+        resultSet=statement.executeQuery();
+
+        while(resultSet.next()) {
+
+            int id = resultSet.getInt("id");
+            String fName = resultSet.getString("first_name");
+            String lName = resultSet.getString("last_name");
+            User user = new User.UserBuilder().id(id).fName(fName).lName(lName).build();
+            users.add(user);
+        }
+    }
+
     public User getUser(String id) {
 
         User user = new User.UserBuilder().build();
+
         try {
 
             connection=dataSource.getConnection();
@@ -129,7 +137,7 @@ public class UsersDao {
             }
 
         } catch (Exception e){
-            e.printStackTrace();
+            logError(e);
         } finally {
             close(connection,statement,resultSet);
         }
@@ -139,31 +147,32 @@ public class UsersDao {
 
     public void addUser(User user){
 
-
         try {
-
-            user = configureUserPassword(user);
-            connection=dataSource.getConnection();
-
-            String sql = "insert into users "+"(email,password,salt,first_name,last_name,role)"+
-                    "values (?,?,?,?,?,?)";
-
-            statement = connection.prepareStatement(sql);
-            statement.setString(1,user.getEmail());
-            statement.setString(2,user.getPassword());
-            statement.setString(3,user.getSalt());
-            statement.setString(4,user.getfName());
-            statement.setString(5,user.getlName());
-            statement.setString(6,String.valueOf(user.getRole()));
-
-            statement.execute();
-
+            submitNewUser(user);
         }catch (Exception e){
-            e.printStackTrace();
+            logError(e);
         } finally {
             close(connection,statement,null);
         }
 
+    }
+
+    private void submitNewUser(User user) throws SQLException {
+        user = configureUserPassword(user);
+        connection=dataSource.getConnection();
+
+        String sql = "insert into users "+"(email,password,salt,first_name,last_name,role)"+
+                "values (?,?,?,?,?,?)";
+
+        statement = connection.prepareStatement(sql);
+        statement.setString(1, user.getEmail());
+        statement.setString(2, user.getPassword());
+        statement.setString(3, user.getSalt());
+        statement.setString(4, user.getfName());
+        statement.setString(5, user.getlName());
+        statement.setString(6,String.valueOf(user.getRole()));
+
+        statement.execute();
     }
 
     private User configureUserPassword(User user) {
@@ -181,26 +190,28 @@ public class UsersDao {
     public void updateUser(User user) {
 
         try {
-
-            connection=dataSource.getConnection();
-
-            String sql ="UPDATE users "+"SET first_name=?, last_name=?, email=? "+
-                    "WHERE id=?";
-
-            statement=connection.prepareStatement(sql);
-
-            statement.setString(1,user.getfName());
-            statement.setString(2,user.getlName());
-            statement.setString(3,user.getEmail());
-            statement.setInt(4,user.getId());
-            statement.executeUpdate();
-
+            submitUpdates(user);
         } catch (Exception e){
-            e.printStackTrace();
+           logError(e);
         } finally {
             close(connection,statement,resultSet);
         }
 
+    }
+
+    private void submitUpdates(User user) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql ="UPDATE users "+"SET first_name=?, last_name=?, email=? "+
+                "WHERE id=?";
+
+        statement=connection.prepareStatement(sql);
+
+        statement.setString(1, user.getfName());
+        statement.setString(2, user.getlName());
+        statement.setString(3, user.getEmail());
+        statement.setInt(4, user.getId());
+        statement.executeUpdate();
     }
 
 
@@ -238,8 +249,8 @@ public class UsersDao {
                     return user;
                 }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            logError(ex);
         } finally {
             close(connection,statement,resultSet);
         }
@@ -252,22 +263,23 @@ public class UsersDao {
     public void deleteUser(String id) {
 
         try {
-
-            connection=dataSource.getConnection();
-
-            String sql = "delete from users where id=?";
-
-            statement = connection.prepareStatement(sql);
-            statement.setString(1,id);
-            statement.executeUpdate();
-
-
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            delete(id);
+        } catch (SQLException ex) {
+            logError(ex);
         } finally {
             close(connection,statement,resultSet);
         }
 
+    }
+
+    private void delete(String id) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql = "delete from users where id=?";
+
+        statement = connection.prepareStatement(sql);
+        statement.setString(1, id);
+        statement.executeUpdate();
     }
 
     private void close(Connection connection, Statement statement, ResultSet resultSet){
@@ -277,7 +289,7 @@ public class UsersDao {
             }
 
             if (connection != null){
-                connection.close(); // put it back in pool
+                connection.close();
             }
 
             if(statement!=null){
@@ -288,5 +300,11 @@ public class UsersDao {
             e.printStackTrace();
         }
     }
+
+
+    private void logError (Exception e){
+        logger.log(Level.SEVERE,e.getMessage());
+    }
+
 
 }

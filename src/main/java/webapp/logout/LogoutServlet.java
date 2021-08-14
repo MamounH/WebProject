@@ -13,7 +13,7 @@ public class LogoutServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res ) throws ServletException, IOException {
-        req.getSession().invalidate(); // name in session will be deleted...
+        req.getSession().invalidate();
 
         req.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(req,res);
     }

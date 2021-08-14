@@ -35,16 +35,20 @@ public class AddStudentsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
 
+        addStudentsToCourse(request);
+
+        response.sendRedirect("/Admin/courses.do");
+    }
+
+    private void addStudentsToCourse(HttpServletRequest request) {
         int courseId = (int) request.getSession().getAttribute("courseId");
         String[] id = request.getParameterValues("id");
 
-        for (int i = 0; i< id.length; i++){
-            coursesDao.addStudentToCourse(id[i],courseId);
+        for (String s : id) {
+            coursesDao.addStudentToCourse(s, courseId);
         }
-
-        response.sendRedirect("/Admin/courses.do");
     }
 
 

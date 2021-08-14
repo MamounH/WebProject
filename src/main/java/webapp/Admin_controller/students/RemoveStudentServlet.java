@@ -37,15 +37,19 @@ public class RemoveStudentServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
 
+        removeStudentsFromCourse(request);
+
+        response.sendRedirect("/Admin/courses.do");
+    }
+
+    private void removeStudentsFromCourse(HttpServletRequest request) {
         int courseId = (int) request.getSession().getAttribute("courseId");
         String[] id = request.getParameterValues("id");
 
-        for (int i = 0; i< id.length; i++){
-            coursesDao.removeStudentFromCourse(id[i],courseId);
+        for (String s : id) {
+            coursesDao.removeStudentFromCourse(s, courseId);
         }
-
-        response.sendRedirect("/Admin/courses.do");
     }
 }

@@ -7,6 +7,9 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class CoursesDao {
 
@@ -16,6 +19,7 @@ public class CoursesDao {
 
     private DataSource dataSource;
 
+    private final Logger logger = Logger.getLogger("CoursesDao Log");
 
 
     public CoursesDao(DataSource dataSource){
@@ -26,36 +30,40 @@ public class CoursesDao {
         List<Course> courses = new ArrayList<>();
 
         try {
-            connection=dataSource.getConnection();
-
-            String sql = "SELECT * FROM courses AS c " +
-                    "JOIN users AS u ON " +
-                    "c.instructor_id=u.id";
-
-            statement = connection.prepareStatement(sql);
-
-            resultSet=statement.executeQuery();
-
-            while(resultSet.next()){
-
-                int courseId = resultSet.getInt("id");
-                String courseName = resultSet.getString("name");
-                String fName = resultSet.getString("first_name");
-                String lName = resultSet.getString("last_name");
-                int instructorId = resultSet.getInt("instructor_id");
-
-                String instructorName=fName+" "+lName;
-                Course tmp = new Course.CourseBuilder().id(courseId).name(courseName).instructorName(instructorName).
-                        instructorId(instructorId).build();
-                courses.add(tmp);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            getAllCourses(courses);
+        } catch (SQLException ex) {
+            logError(ex);
         } finally {
             close(connection,statement,resultSet);
         }
 
         return courses;
+    }
+
+    private void getAllCourses(List<Course> courses) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql = "SELECT * FROM courses AS c " +
+                "JOIN users AS u ON " +
+                "c.instructor_id=u.id";
+
+        statement = connection.prepareStatement(sql);
+
+        resultSet=statement.executeQuery();
+
+        while(resultSet.next()){
+
+            int courseId = resultSet.getInt("id");
+            String courseName = resultSet.getString("name");
+            String fName = resultSet.getString("first_name");
+            String lName = resultSet.getString("last_name");
+            int instructorId = resultSet.getInt("instructor_id");
+
+            String instructorName=fName+" "+lName;
+            Course tmp = new Course.CourseBuilder().id(courseId).name(courseName).instructorName(instructorName).
+                    instructorId(instructorId).build();
+            courses.add(tmp);
+        }
     }
 
     public Course getCourse(String id) {
@@ -81,8 +89,8 @@ public class CoursesDao {
             }
 
         } catch (Exception e){
-            e.printStackTrace();
-        } finally {
+            logError(e);
+            } finally {
             close(connection,statement,resultSet);
         }
 
@@ -93,22 +101,25 @@ public class CoursesDao {
     public void addCourse(String courseName, int instructorId) {
 
         try {
-            connection=dataSource.getConnection();
-
-            String sql = "insert into courses "+"(name,instructor_id)"+
-                    "values (?,?)";
-
-            statement = connection.prepareStatement(sql);
-            statement.setString(1,courseName);
-            statement.setInt(2,instructorId);
-            statement.execute();
-
+            addNewCourse(courseName, instructorId);
         }catch (Exception e){
-            e.printStackTrace();
+            logError(e);
         } finally {
             close(connection,statement,null);
         }
 
+    }
+
+    private void addNewCourse(String courseName, int instructorId) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql = "insert into courses "+"(name,instructor_id)"+
+                "values (?,?)";
+
+        statement = connection.prepareStatement(sql);
+        statement.setString(1,courseName);
+        statement.setInt(2,instructorId);
+        statement.execute();
     }
 
     public List<Course> getInstructorCourses(int id){
@@ -116,26 +127,9 @@ public class CoursesDao {
 
         List<Course> courses = new ArrayList<>();
         try {
-            connection=dataSource.getConnection();
-
-            String sql = "SELECT * FROM courses WHERE instructor_id=?";
-
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1,id);
-
-            resultSet=statement.executeQuery();
-
-            while(resultSet.next()){
-
-                int courseId = resultSet.getInt("id");
-                String courseName = resultSet.getString("name");
-
-                Course tmp = new Course.CourseBuilder().id(courseId).name(courseName).build();
-
-                courses.add(tmp);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            findInstructorCourses(id, courses);
+        } catch (SQLException ex) {
+            logError(ex);
         } finally {
             close(connection,statement,resultSet);
         }
@@ -144,25 +138,49 @@ public class CoursesDao {
 
     }
 
+    private void findInstructorCourses(int id, List<Course> courses) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql = "SELECT * FROM courses WHERE instructor_id=?";
+
+        statement = connection.prepareStatement(sql);
+        statement.setInt(1, id);
+
+        resultSet=statement.executeQuery();
+
+        while(resultSet.next()){
+
+            int courseId = resultSet.getInt("id");
+            String courseName = resultSet.getString("name");
+
+            Course tmp = new Course.CourseBuilder().id(courseId).name(courseName).build();
+
+            courses.add(tmp);
+        }
+    }
+
     public void addStudentToCourse(String sId, int courseId) {
 
         try {
-            connection=dataSource.getConnection();
-
-            String sql = "insert into student_marks "+"(student_id,course_id)"+
-                    "values (?,?)";
-
-            statement = connection.prepareStatement(sql);
-            statement.setString(1,sId);
-            statement.setInt(2,courseId);
-            statement.execute();
-
+            addNewStudents(sId, courseId);
         }catch (Exception e){
-            e.printStackTrace();
+            logError(e);
         } finally {
             close(connection,statement,null);
         }
 
+    }
+
+    private void addNewStudents(String sId, int courseId) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql = "insert into student_marks "+"(student_id,course_id)"+
+                "values (?,?)";
+
+        statement = connection.prepareStatement(sql);
+        statement.setString(1,sId);
+        statement.setInt(2,courseId);
+        statement.execute();
     }
 
 
@@ -170,20 +188,10 @@ public class CoursesDao {
 
         try {
 
-            connection=dataSource.getConnection();
-
-            String sql ="UPDATE courses "+"SET name=?, instructor_id=? "+
-                    "WHERE id=?";
-
-            statement=connection.prepareStatement(sql);
-
-            statement.setString(1,course.getName());
-            statement.setInt(2,course.getInstructorId());
-            statement.setInt(3,course.getId());
-            statement.executeUpdate();
+            submitUpdates(course);
 
         } catch (Exception e){
-            e.printStackTrace();
+            logError(e);
         } finally {
             close(connection,statement,resultSet);
         }
@@ -191,68 +199,115 @@ public class CoursesDao {
 
     }
 
+    private void submitUpdates(Course course) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql ="UPDATE courses "+"SET name=?, instructor_id=? "+
+                "WHERE id=?";
+
+        statement=connection.prepareStatement(sql);
+
+        statement.setString(1, course.getName());
+        statement.setInt(2, course.getInstructorId());
+        statement.setInt(3, course.getId());
+        statement.executeUpdate();
+    }
+
     public void deleteCourse(String id) {
 
         try {
-            int courseId = Integer.parseInt(id);
-
-            connection = dataSource.getConnection();
-
-            String sql = "delete from courses where id=?";
-
-            statement=connection.prepareStatement(sql);
-
-            statement.setInt(1,courseId);
-
-            statement.execute();
+            delete(id);
         } catch (Exception e){
-            e.printStackTrace();
+            logError(e);
         } finally {
             close(connection,statement,null);
         }
 
     }
 
+    private void delete(String id) throws SQLException {
+        int courseId = Integer.parseInt(id);
+
+        connection = dataSource.getConnection();
+
+        String sql = "delete from courses where id=?";
+
+        statement=connection.prepareStatement(sql);
+
+        statement.setInt(1,courseId);
+
+        statement.execute();
+    }
+
     public List<User> getPossibleStudents(int id) {
 
         List<User> users=new ArrayList<>();
         try {
-
-            connection=dataSource.getConnection();
-
-            String sql =
-                    "SELECT *" +
-                    "FROM student_marks m " +
-                    "JOIN users u ON u.id=m.student_id " +
-                    "WHERE u.id NOT IN ( " +
-                    "SELECT student_id " +
-                    "from student_marks " +
-                    "where course_id=?)";
-
-
-            statement = connection.prepareStatement(sql);
-
-            statement.setInt(1,id);
-
-            resultSet=statement.executeQuery();
-
-            while(resultSet.next()) {
-
-                int Sid = resultSet.getInt("id");
-                String fName = resultSet.getString("first_name");
-                String lName = resultSet.getString("last_name");
-                String email = resultSet.getString("email");
-                User user = new User.UserBuilder().id(Sid).email(email).fName(fName).lName(lName).build();
-                users.add(user);
-            }
-
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            findStudents(id, users);
+        } catch (SQLException ex) {
+            logError(ex);
         } finally {
             close(connection,statement,resultSet);
         }
         return users;
     }
+
+    private void findStudents(int id, List<User> users) throws SQLException {
+        connection=dataSource.getConnection();
+
+        String sql =
+                "SELECT *" +
+                "FROM student_marks m " +
+                "JOIN users u ON u.id=m.student_id " +
+                "WHERE u.id NOT IN ( " +
+                "SELECT student_id " +
+                "from student_marks " +
+                "where course_id=?)";
+
+
+        statement = connection.prepareStatement(sql);
+
+        statement.setInt(1, id);
+
+        resultSet=statement.executeQuery();
+
+        while(resultSet.next()) {
+
+            int Sid = resultSet.getInt("id");
+            String fName = resultSet.getString("first_name");
+            String lName = resultSet.getString("last_name");
+            String email = resultSet.getString("email");
+            User user = new User.UserBuilder().id(Sid).email(email).fName(fName).lName(lName).build();
+            users.add(user);
+        }
+    }
+
+    public void removeStudentFromCourse(String studentId, int courseId) {
+
+        try {
+            removeStudents(studentId, courseId);
+        } catch (Exception e){
+           logError(e);
+        } finally {
+            close(connection,statement,null);
+        }
+
+
+    }
+
+    private void removeStudents(String studentId, int courseId) throws SQLException {
+        connection = dataSource.getConnection();
+
+        String sql = "delete from student_marks where student_id=? and course_id=?";
+
+        statement=connection.prepareStatement(sql);
+
+        statement.setString(1,studentId);
+        statement.setInt(2,courseId);
+
+        statement.execute();
+    }
+
 
     private void close(Connection connection, Statement statement, ResultSet resultSet){
         try {
@@ -261,7 +316,7 @@ public class CoursesDao {
             }
 
             if (connection != null){
-                connection.close(); // put it back in pool
+                connection.close();
             }
 
             if(statement!=null){
@@ -274,29 +329,10 @@ public class CoursesDao {
     }
 
 
-    public void removeStudentFromCourse(String studentId, int courseId) {
 
-
-        try {
-            connection = dataSource.getConnection();
-
-            String sql = "delete from student_marks where student_id=? and course_id=?";
-
-            statement=connection.prepareStatement(sql);
-
-            statement.setString(1,studentId);
-            statement.setInt(2,courseId);
-
-            statement.execute();
-        } catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            close(connection,statement,null);
-        }
-
-
+    private void logError (Exception e){
+        logger.log(Level.SEVERE,e.getMessage());
     }
-
 
 
 }

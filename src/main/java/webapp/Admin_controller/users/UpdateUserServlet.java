@@ -35,16 +35,20 @@ public class UpdateUserServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws  IOException {
 
-        int id = Integer.parseInt(req.getParameter("id"));
-        String fName = req.getParameter("fName");
-        String lName = req.getParameter("lName");
-        String email = req.getParameter("email");
-        User user= new User.UserBuilder().id(id).fName(fName).lName(lName).email(email).build();
+        User user = getUser(req);
         usersDao.updateUser(user);
         res.sendRedirect("/Admin/Users.do");
 
 
+    }
+
+    private User getUser(HttpServletRequest req) {
+        int id = Integer.parseInt(req.getParameter("id"));
+        String fName = req.getParameter("fName");
+        String lName = req.getParameter("lName");
+        String email = req.getParameter("email");
+        return new User.UserBuilder().id(id).fName(fName).lName(lName).email(email).build();
     }
 }

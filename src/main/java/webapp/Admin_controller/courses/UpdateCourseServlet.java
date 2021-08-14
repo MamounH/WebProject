@@ -35,14 +35,19 @@ public class UpdateCourseServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws  IOException {
 
+        Course course = getUpdatedCourse(req);
+        coursesDao.updateCourse(course);
+        res.sendRedirect("/Admin/courses.do");
+    }
+
+    private Course getUpdatedCourse(HttpServletRequest req) {
         int id = Integer.parseInt(req.getParameter("id"));
         String name = req.getParameter("name");
         int instructorId= Integer.parseInt(req.getParameter("Instructor_id"));
         Course course= new Course.CourseBuilder().id(id).name(name).instructorId(instructorId).build();
-        coursesDao.updateCourse(course);
-        res.sendRedirect("/Admin/courses.do");
+        return course;
     }
 
 

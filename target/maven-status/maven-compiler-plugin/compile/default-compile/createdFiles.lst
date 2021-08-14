@@ -1,6 +1,7 @@
 webapp\filter\LoginFilter.class
 webapp\logout\LogoutServlet.class
 webapp\data\dao\CoursesDao.class
+webapp\security_config\SHA512Hash.class
 webapp\data\domain\CourseMarks.class
 webapp\Admin_controller\courses\AddCourseServlet.class
 webapp\Admin_controller\courses\UpdateCourseServlet.class
@@ -9,6 +10,7 @@ webapp\Admin_controller\courses\CoursesServlet.class
 webapp\Admin_controller\AdminServlet.class
 webapp\data\dao\UsersDao.class
 webapp\filter\LoginFilter$1.class
+webapp\login\LoginServlet$1.class
 webapp\data\dao\StudentDAO.class
 webapp\instructor_controller\CourseMarksServlet.class
 webapp\instructor_controller\InstructorServlet.class
@@ -26,5 +28,4 @@ webapp\data\domain\Student.class
 webapp\student_controller\StudentServlet.class
 webapp\Admin_controller\courses\DeleteCourseServlet.class
 webapp\Admin_controller\users\AddUserServlet.class
-webapp\security_config\PasswordHash.class
 webapp\Admin_controller\students\AddStudentsServlet.class

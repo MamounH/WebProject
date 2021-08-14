@@ -3,7 +3,7 @@ package webapp.Admin_controller.users;
 import webapp.data.Role;
 import webapp.data.domain.User;
 import webapp.data.dao.UsersDao;
-import webapp.security_config.PasswordHash;
+import webapp.security_config.SHA512Hash;
 
 import javax.annotation.Resource;
 import javax.servlet.*;
@@ -22,7 +22,7 @@ public class AddUserServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        usersDao = new UsersDao(dataSource, new PasswordHash());
+        usersDao = new UsersDao(dataSource, new SHA512Hash());
     }
 
 
@@ -33,18 +33,23 @@ public class AddUserServlet extends HttpServlet {
 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-     String fName = request.getParameter("fName");
-     String lName = request.getParameter("lName");
-     String email = request.getParameter("email");
-     String password = request.getParameter("password");
-     String role = request.getParameter("role");
-
-     User user = new User.UserBuilder().fName(fName).lName(lName).email(email)
-                     .password(password).role(Role.valueOf(role)).build();
-     usersDao.addUser(user);
+    User user = getUser(request);
+    usersDao.addUser(user);
      response.sendRedirect("/Admin/Users.do");
 
+    }
+
+    private User getUser(HttpServletRequest request) {
+        String fName = request.getParameter("fName");
+        String lName = request.getParameter("lName");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String role = request.getParameter("role");
+
+        User user = new User.UserBuilder().fName(fName).lName(lName).email(email)
+                        .password(password).role(Role.valueOf(role)).build();
+        return user;
     }
 }

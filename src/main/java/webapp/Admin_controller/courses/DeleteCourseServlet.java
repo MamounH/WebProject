@@ -13,6 +13,7 @@ import java.io.IOException;
 public class DeleteCourseServlet extends HttpServlet {
 
     private CoursesDao coursesDao;
+
     @Resource(name="jdbc/project")
     private DataSource dataSource;
 

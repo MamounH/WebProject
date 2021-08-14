@@ -35,7 +35,7 @@ public class AddCourseServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         String courseName = request.getParameter("name");
         int InstructorId = Integer.parseInt(request.getParameter("instructorID"));
         coursesDao.addCourse(courseName,InstructorId);
