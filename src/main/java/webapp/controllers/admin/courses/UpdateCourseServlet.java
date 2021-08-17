@@ -1,4 +1,4 @@
-package webapp.Admin_controller.courses;
+package webapp.controllers.admin.courses;
 
 import webapp.data.domain.Course;
 import webapp.data.dao.CoursesDao;
@@ -46,8 +46,7 @@ public class UpdateCourseServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         String name = req.getParameter("name");
         int instructorId= Integer.parseInt(req.getParameter("Instructor_id"));
-        Course course= new Course.CourseBuilder().id(id).name(name).instructorId(instructorId).build();
-        return course;
+        return new Course.CourseBuilder().id(id).name(name).instructorId(instructorId).build();
     }
 
 

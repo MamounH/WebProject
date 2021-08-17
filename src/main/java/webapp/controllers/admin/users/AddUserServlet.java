@@ -1,4 +1,4 @@
-package webapp.Admin_controller.users;
+package webapp.controllers.admin.users;
 
 import webapp.data.Role;
 import webapp.data.domain.User;
@@ -48,8 +48,7 @@ public class AddUserServlet extends HttpServlet {
         String password = request.getParameter("password");
         String role = request.getParameter("role");
 
-        User user = new User.UserBuilder().fName(fName).lName(lName).email(email)
+        return new User.UserBuilder().fName(fName).lName(lName).email(email)
                         .password(password).role(Role.valueOf(role)).build();
-        return user;
     }
 }

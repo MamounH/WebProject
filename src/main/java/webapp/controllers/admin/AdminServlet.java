@@ -1,6 +1,6 @@
-package webapp.Admin_controller.courses;
+package webapp.controllers.admin;
 
-import webapp.data.dao.CoursesDao;
+import webapp.data.dao.UsersDao;
 
 import javax.annotation.Resource;
 import javax.servlet.*;
@@ -9,11 +9,11 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/courses.do")
+@WebServlet(urlPatterns = "/Admin/Users.do")
+public class AdminServlet extends HttpServlet {
 
-public class CoursesServlet extends HttpServlet {
 
-    private CoursesDao coursesDao;
+    private UsersDao usersDao;
 
     @Resource(name="jdbc/project")
     private DataSource dataSource;
@@ -21,17 +21,16 @@ public class CoursesServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        coursesDao = new CoursesDao(dataSource);
+        usersDao = new UsersDao(dataSource);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.setAttribute("list", coursesDao.getAll());
-        request.getRequestDispatcher("/WEB-INF/Admin/courses/ListCourses.jsp").forward(request,response);
+        request.setAttribute("list", usersDao.getAll());
+        request.getRequestDispatcher("/WEB-INF/Admin/users/Users.jsp").forward(request,response);
     }
 
 
 
 }
-

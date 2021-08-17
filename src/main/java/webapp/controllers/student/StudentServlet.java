@@ -1,6 +1,6 @@
-package webapp.instructor_controller;
+package webapp.controllers.student;
 
-import webapp.data.dao.CoursesDao;
+import webapp.data.dao.StudentDAO;
 
 import javax.annotation.Resource;
 import javax.servlet.*;
@@ -9,11 +9,11 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Instructor/Courses.do")
-public class InstructorServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/StudentCourses.do")
+public class StudentServlet extends HttpServlet {
 
 
-    private CoursesDao coursesDao;
+    private StudentDAO studentDao;
 
     @Resource(name="jdbc/project")
     private DataSource dataSource;
@@ -21,16 +21,15 @@ public class InstructorServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        coursesDao = new CoursesDao(dataSource);
+        studentDao = new StudentDAO(dataSource);
     }
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
         int id = (int) req.getSession().getAttribute("id");
-        req.setAttribute("list", coursesDao.getInstructorCourses(id));
-        req.getRequestDispatcher("/WEB-INF/Instructor/InstructorCourses.jsp").forward(req,res);
+        req.setAttribute("list", studentDao.getStudentMarks(id));
+        req.getRequestDispatcher("/WEB-INF/Students/listStudentCourses.jsp").forward(req,res);
     }
 
 

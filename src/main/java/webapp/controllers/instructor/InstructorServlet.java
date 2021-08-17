@@ -1,4 +1,4 @@
-package webapp.Admin_controller.courses;
+package webapp.controllers.instructor;
 
 import webapp.data.dao.CoursesDao;
 
@@ -9,8 +9,9 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/DeleteCourse.do")
-public class DeleteCourseServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/Instructor/Courses.do")
+public class InstructorServlet extends HttpServlet {
+
 
     private CoursesDao coursesDao;
 
@@ -26,8 +27,10 @@ public class DeleteCourseServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        coursesDao.deleteCourse(req.getParameter("id"));
-        res.sendRedirect("/Admin/courses.do");
+
+        int id = (int) req.getSession().getAttribute("id");
+        req.setAttribute("list", coursesDao.getInstructorCourses(id));
+        req.getRequestDispatcher("/WEB-INF/Instructor/InstructorCourses.jsp").forward(req,res);
     }
 
 

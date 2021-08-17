@@ -1,4 +1,4 @@
-package webapp.Admin_controller.users;
+package webapp.controllers.admin.users;
 
 import webapp.data.dao.UsersDao;
 

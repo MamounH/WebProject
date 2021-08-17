@@ -1,4 +1,4 @@
-package webapp.Admin_controller.courses;
+package webapp.controllers.admin.courses;
 
 import webapp.data.dao.CoursesDao;
 import webapp.data.Role;

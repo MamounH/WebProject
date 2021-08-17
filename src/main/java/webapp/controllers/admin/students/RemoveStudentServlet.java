@@ -1,4 +1,4 @@
-package webapp.Admin_controller.students;
+package webapp.controllers.admin.students;
 
 import webapp.data.dao.CoursesDao;
 import webapp.data.dao.StudentDAO;
