@@ -47,7 +47,6 @@
     </dependencies>
 
     <build>
-       <finalName>ROOT</finalName>
         <pluginManagement>
             <plugins>
 
