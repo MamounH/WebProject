@@ -9,7 +9,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Instructor/CourseMarks.do")
+@WebServlet(urlPatterns = "/Instructor/CourseMarks")
 public class CourseMarksServlet extends HttpServlet {
 
 
@@ -45,7 +45,7 @@ public class CourseMarksServlet extends HttpServlet {
 
         updateMarks(studentId, marks, courseId);
 
-        response.sendRedirect("/Instructor/CourseMarks.do?courseId="+courseId);
+        response.sendRedirect("/Instructor/CourseMarks?courseId="+courseId);
     }
 
     private void updateMarks(String[] studentId, String[] marks, int courseId) {

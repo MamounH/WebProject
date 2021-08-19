@@ -7,7 +7,7 @@
     <p>
         <font color="red">${errorMessage}</font>
     </p>
-    <form method="POST" action="/Admin/AddCourse.do">
+    <form method="POST" action="/Admin/AddCourse">
 
 
 
@@ -29,7 +29,7 @@
         </fieldset>
 
 
-        <a class="btn btn-success" href="/Admin/courses.do">Cancel Adding</a>
+        <a class="btn btn-success" href="/Admin/courses">Cancel Adding</a>
         <input  class="btn btn-success" name="add" type="submit" />
 
 

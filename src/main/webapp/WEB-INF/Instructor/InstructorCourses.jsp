@@ -16,7 +16,7 @@
             <c:forEach items="${list}" var="course">
             <td>${course.id}</td>
             <td>${course.name}</td>
-            <td><a class="btn btn-info" href="/Instructor/CourseMarks.do?courseId=${course.id}">Enrolled Students</a></td>
+            <td><a class="btn btn-info" href="/Instructor/CourseMarks?courseId=${course.id}">Enrolled Students</a></td>
 
         </tr>
         </c:forEach>

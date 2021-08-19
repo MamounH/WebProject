@@ -10,7 +10,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/UpdateCourse.do")
+@WebServlet(urlPatterns = "/Admin/UpdateCourse")
 public class UpdateCourseServlet extends HttpServlet {
 
 
@@ -39,7 +39,7 @@ public class UpdateCourseServlet extends HttpServlet {
 
         Course course = getUpdatedCourse(req);
         coursesDao.updateCourse(course);
-        res.sendRedirect("/Admin/courses.do");
+        res.sendRedirect("/Admin/courses");
     }
 
     private Course getUpdatedCourse(HttpServletRequest req) {

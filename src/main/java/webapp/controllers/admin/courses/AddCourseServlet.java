@@ -11,7 +11,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/AddCourse.do")
+@WebServlet(urlPatterns = "/Admin/AddCourse")
 public class AddCourseServlet extends HttpServlet {
 
 
@@ -39,7 +39,7 @@ public class AddCourseServlet extends HttpServlet {
         String courseName = request.getParameter("name");
         int InstructorId = Integer.parseInt(request.getParameter("instructorID"));
         coursesDao.addCourse(courseName,InstructorId);
-        response.sendRedirect("/Admin/courses.do");
+        response.sendRedirect("/Admin/courses");
     }
 
 

@@ -31,8 +31,8 @@
             <td>${user.lName}</td>
             <td>${user.email}</td>
             <td>${user.role}</td>
-                <td><a class="btn btn-info" href="/Admin/UpdateUser.do?id=${user.id}">Update User</a></td>
-                <td><a class="btn btn-danger" href="/Admin/DeleteUser.do?id=${user.id}"
+                <td><a class="btn btn-info" href="/Admin/UpdateUser?id=${user.id}">Update User</a></td>
+                <td><a class="btn btn-danger" href="/Admin/DeleteUser?id=${user.id}"
                        onclick="if (!(confirm('are you sure you want to delete this student'))) return false"
                 >Delete User</a></td>
 
@@ -44,7 +44,7 @@
         </tbody>
     </table>
     </div>
-    <a class="btn btn-success" href="/Admin/AddUser.do">Add New User</a>
+    <a class="btn btn-success" href="/Admin/AddUser">Add New User</a>
 
 </div>
 

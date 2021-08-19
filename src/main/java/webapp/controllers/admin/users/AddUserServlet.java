@@ -12,7 +12,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/AddUser.do")
+@WebServlet(urlPatterns = "/Admin/AddUser")
 public class AddUserServlet extends HttpServlet {
 
     private UsersDao usersDao;
@@ -37,7 +37,7 @@ public class AddUserServlet extends HttpServlet {
 
     User user = getUser(request);
     usersDao.addUser(user);
-     response.sendRedirect("/Admin/Users.do");
+     response.sendRedirect("/Admin/Users");
 
     }
 

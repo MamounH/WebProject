@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-@WebServlet(urlPatterns = "/login.do")
+@WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
 	private UsersDao usersDao;
@@ -47,9 +47,9 @@ public class LoginServlet extends HttpServlet {
 
 
 		switch (user.getRole()){
-			case ADMIN-> res.sendRedirect("/Admin/Users.do");
-			case INSTRUCTOR-> res.sendRedirect("/Instructor/Courses.do");
-			case STUDENT->res.sendRedirect("/StudentCourses.do");
+			case ADMIN-> res.sendRedirect("/Admin/Users");
+			case INSTRUCTOR-> res.sendRedirect("/Instructor/Courses");
+			case STUDENT->res.sendRedirect("/StudentCourses");
 			default-> {
 				req.setAttribute("errorM","Invalid User");
 				req.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(req,res);

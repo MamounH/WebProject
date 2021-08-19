@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "*.do")
+@WebFilter(urlPatterns = "*")
 public class LoginFilter implements Filter {
 
     private FilterConfig filterConfig = null;
@@ -46,14 +46,14 @@ public class LoginFilter implements Filter {
     }
 
     private void forwardToLoginPage(ServletRequest serverReq, ServletResponse serverRes, HttpServletRequest request) throws ServletException, IOException {
-        request.getRequestDispatcher("/login.do").forward(serverReq,serverRes);
+        request.getRequestDispatcher("/login").forward(serverReq,serverRes);
     }
 
 
     private void checkInstructorPath(ServletRequest serverReq, ServletResponse serverRes, HttpServletRequest request,FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         if (path.startsWith("/Admin/")){
-            request.getRequestDispatcher("/Instructor/Courses.do").forward(serverReq, serverRes);
+            request.getRequestDispatcher("/Instructor/Courses").forward(serverReq, serverRes);
         }  else forwardToRequestedPage(serverReq,serverRes,filterChain);
     }
 
@@ -61,7 +61,7 @@ public class LoginFilter implements Filter {
         String path = request.getServletPath();
 
         if (path.startsWith("/Admin/") || path.startsWith("/Instructor/") ){
-            request.getRequestDispatcher("/StudentCourses.do").forward(serverReq, serverRes);
+            request.getRequestDispatcher("/StudentCourses").forward(serverReq, serverRes);
         } else forwardToRequestedPage(serverReq, serverRes, filterChain);
     }
 

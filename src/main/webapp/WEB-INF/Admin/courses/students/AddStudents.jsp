@@ -14,7 +14,7 @@ input[type=checkbox] {
 
 <div class="container">
 
-    <form method="POST" action="/Admin/AddStudent.do">
+    <form method="POST" action="/Admin/AddStudent">
     <div class="table-wrapper">
 
     <table class = "table table-striped table-hover">
@@ -37,7 +37,7 @@ input[type=checkbox] {
         </tbody>
     </table>
     </div>
-        <a class="btn btn-success" href="/Admin/courses.do">Cancel Adding</a>
+        <a class="btn btn-success" href="/Admin/courses">Cancel Adding</a>
         <input  class="btn btn-success" name="add" type="submit" />
     </div>
     </form>

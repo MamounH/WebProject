@@ -3,7 +3,7 @@
 
 <div class="container">
 
-    <form method="POST" action="/Admin/UpdateUser.do">
+    <form method="POST" action="/Admin/UpdateUser">
 
         <input type="hidden" name="id" value="${user.id}"/>
 
@@ -26,7 +26,7 @@
         </fieldset>
 
 
-        <a class="btn btn-success" href="/Admin/Users.do">Cancel Updating</a>
+        <a class="btn btn-success" href="/Admin/Users">Cancel Updating</a>
         <input  class="btn btn-success" name="add" type="submit" />
 
 

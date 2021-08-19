@@ -7,7 +7,7 @@
   <p>
     <font color="red">${errorMessage}</font>
   </p>
-  <form method="POST" action="/Admin/AddUser.do">
+  <form method="POST" action="/Admin/AddUser">
 
 
 
@@ -42,7 +42,7 @@
       <INPUT TYPE="radio" NAME="role" VALUE="STUDENT"/> Student
     </fieldset>
 
-    <a class="btn btn-success" href="/Admin/Users.do">Cancel Adding</a>
+    <a class="btn btn-success" href="/Admin/Users">Cancel Adding</a>
     <input  class="btn btn-success" name="add" type="submit" />
 
 

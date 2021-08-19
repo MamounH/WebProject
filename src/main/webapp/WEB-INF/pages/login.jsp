@@ -11,14 +11,14 @@
 
 
     <div class="container">
-        <div class="logo">Atypon University
+        <div class="logo">Atypon University JenkinsTest
         </div>
 
         <center>
             <div class="middle">
                 <div id="login">
 
-                    <form action="/login.do" method="post">
+                    <form action="/login" method="post">
 
                                 <p color="red">${errorM}</p>
 

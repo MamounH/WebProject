@@ -10,7 +10,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/RemoveStudents.do")
+@WebServlet(urlPatterns = "/Admin/RemoveStudents")
 public class RemoveStudentServlet extends HttpServlet {
 
     private CoursesDao coursesDao;
@@ -41,7 +41,7 @@ public class RemoveStudentServlet extends HttpServlet {
 
         removeStudentsFromCourse(request);
 
-        response.sendRedirect("/Admin/courses.do");
+        response.sendRedirect("/Admin/courses");
     }
 
     private void removeStudentsFromCourse(HttpServletRequest request) {

@@ -9,7 +9,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/courses.do")
+@WebServlet(urlPatterns = "/Admin/courses")
 
 public class CoursesServlet extends HttpServlet {
 

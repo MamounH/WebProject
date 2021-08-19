@@ -5,7 +5,7 @@
 <div class="container">
 
 
-    <form method="post" action="/Instructor/CourseMarks.do">
+    <form method="post" action="/Instructor/CourseMarks">
     <table class = "table table-striped">
         <thead>
         <th>Student ID</th>
@@ -35,7 +35,7 @@
         </tbody>
     </table>
 
-        <a class="btn btn-success" href="/Instructor/Courses.do">Cancel</a>
+        <a class="btn btn-success" href="/Instructor/Courses">Cancel</a>
         <input class="btn btn-success" type="submit" value="Update">
     </form>
 

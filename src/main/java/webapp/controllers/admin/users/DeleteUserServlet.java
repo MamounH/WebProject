@@ -9,7 +9,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/DeleteUser.do")
+@WebServlet(urlPatterns = "/Admin/DeleteUser")
 public class DeleteUserServlet extends HttpServlet {
 
 
@@ -27,7 +27,7 @@ public class DeleteUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         usersDao.deleteUser(req.getParameter("id"));
-        res.sendRedirect("/Admin/Users.do");
+        res.sendRedirect("/Admin/Users");
     }
 
 

@@ -6,7 +6,7 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item">
-                <a class="nav-link" href="/StudentCourses.do">
+                <a class="nav-link" href="/StudentCourses">
                     <i class="fa fa-graduation-cap">
                     </i>
                     My Marks
@@ -25,7 +25,7 @@
         <ul class="nav navbar-nav navbar-right">
 
             <li class="nav-item">
-                <a class="nav-link" href="/logout.do">
+                <a class="nav-link" href="/logout">
                     <i class="fa fa-sign-out">
                     </i>
                     Logout

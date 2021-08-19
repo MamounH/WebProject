@@ -10,7 +10,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/UpdateUser.do")
+@WebServlet(urlPatterns = "/Admin/UpdateUser")
 public class UpdateUserServlet extends HttpServlet {
 
 
@@ -39,7 +39,7 @@ public class UpdateUserServlet extends HttpServlet {
 
         User user = getUser(req);
         usersDao.updateUser(user);
-        res.sendRedirect("/Admin/Users.do");
+        res.sendRedirect("/Admin/Users");
 
 
     }

@@ -9,7 +9,7 @@ import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Admin/AddStudent.do")
+@WebServlet(urlPatterns = "/Admin/AddStudent")
 public class AddStudentsServlet extends HttpServlet {
 
 
@@ -39,7 +39,7 @@ public class AddStudentsServlet extends HttpServlet {
 
         addStudentsToCourse(request);
 
-        response.sendRedirect("/Admin/courses.do");
+        response.sendRedirect("/Admin/courses");
     }
 
     private void addStudentsToCourse(HttpServletRequest request) {

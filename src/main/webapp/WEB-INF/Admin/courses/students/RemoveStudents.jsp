@@ -14,7 +14,7 @@ input[type=checkbox] {
 
 <div class="container">
 
-    <form method="POST" action="/Admin/RemoveStudents.do">
+    <form method="POST" action="/Admin/RemoveStudents">
         <div class="table-wrapper">
 
             <table class = "table table-striped table-hover">
@@ -39,7 +39,7 @@ input[type=checkbox] {
                 </tbody>
             </table>
         </div>
-        <a class="btn btn-success" href="/Admin/courses.do">Cancel Removing</a>
+        <a class="btn btn-success" href="/Admin/courses">Cancel Removing</a>
         <input  class="btn btn-success" name="add" type="submit" />
 </div>
 </form>

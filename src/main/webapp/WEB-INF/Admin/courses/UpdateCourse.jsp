@@ -6,7 +6,7 @@
 
   Update User
 
-  <form method="POST" action="/Admin/UpdateCourse.do">
+  <form method="POST" action="/Admin/UpdateCourse">
 
     <input type="hidden" name="id" value="${course.id}"/>
 
@@ -24,7 +24,7 @@
     </fieldset>
 
 
-    <a class="btn btn-success" href="/Admin/courses.do">Cancel Updating</a>
+    <a class="btn btn-success" href="/Admin/courses">Cancel Updating</a>
     <input  class="btn btn-success" name="add" type="submit" />
 
 
