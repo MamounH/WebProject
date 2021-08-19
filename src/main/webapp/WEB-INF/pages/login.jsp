@@ -11,7 +11,7 @@
 
 
     <div class="container">
-        <div class="logo">Atypon University
+        <div class="logo">Atypon University Jenkins Test
         </div>
 
         <center>
